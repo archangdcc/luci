@@ -432,7 +432,7 @@ function action_mmupgrade()
 			if chunk then
 				fp:write(chunk)
 			end
-			if eof then
+			if eof and fp then
 				fp:close()
 			end
 		end
