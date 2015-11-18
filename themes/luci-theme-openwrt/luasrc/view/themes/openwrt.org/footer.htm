@@ -9,11 +9,11 @@
 </div>
 <%
 -- check new theme can be supported
-local cur_system, cur_model = luci.sys.sysinfo()
+local board = luci.util.ubus("system", "board")
 local unsupportlist = {"WR703N"}
 local tsupport = true
 for i, dev in pairs(unsupportlist) do
-	if string.find(cur_model, dev) then
+	if string.find(board.model, dev) then
 		tsupport = false
 		break
 	end
