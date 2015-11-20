@@ -34,17 +34,17 @@ end
 
 function api_getstatus()
 	local status = {
-		elapsed = '0',
-		ghsav = '0',
-		ghsmm = '0',
-		temp = '0',
-		fan = '0',
-		voltage = '0',
-		modularcnt = '0',
+		elapsed = nil,
+		ghsav = nil,
+		ghsmm = nil,
+		temp = nil,
+		fan = nil,
+		voltage = nil,
+		modularcnt = 0,
 		network = {},
 		pool = {},
-		openwrtver = '0',
-		systime = '0',
+		openwrtver = nil,
+		systime = nil,
 	}
 
 	-- Hashrate
@@ -56,7 +56,7 @@ function api_getstatus()
 								"Elapsed=(-?[%d]+)," ..
 								"MHS av=(-?[%d%.]+),")
 			if ghsav then
-				status.elapsed = elapsed
+				status.elapsed = tonumber(elapsed)
 				status.ghsav = ghsav and (ghsav / 1000) or 0
 			end
 		end
@@ -89,12 +89,12 @@ function api_getstatus()
                     "GHSmm%[(-?[%.%d]+)%]")
 
                     devdata[#devdata+1] = {
-                        temp = temp,
-                        temp0 = temp0,
-                        temp1 = temp1,
-                        fan = fan,
-                        v = v,
-			ghsmm = ghsmm
+                        temp = tonumber(temp),
+                        temp0 = tonumber(temp0),
+                        temp1 = tonumber(temp1),
+                        fan = tonumber(fan),
+                        v = tonumber(v),
+			ghsmm = tonumber(ghsmm)
                     }
                     istart, iend = line:find("MM ID", iend + 1)
                 end
@@ -130,10 +130,10 @@ function api_getstatus()
 			ghsmm = ghsmm + item.ghsmm
 		end
 
-		status.temp = temp
-		status.ghsmm = ghsmm
-		status.fan = fan
-		status.voltage = v
+		status.temp = tonumber(temp)
+		status.ghsmm = tonumber(ghsmm)
+		status.fan = tonumber(fan)
+		status.voltage = tonumber(v)
 	end
 
 	-- pool info
@@ -158,8 +158,8 @@ function api_getstatus()
 					['pool'] = pool,
 					['url'] = url,
 					['user'] = user,
-					['diff'] = diff,
-					['accept'] = accept
+					['diff'] = tonumber(diff),
+					['accept'] = tonumber(accept)
 				}
 			end
 		end
