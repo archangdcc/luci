@@ -36,9 +36,9 @@ function getstatus() {
 				_ghsav = _data.ghsav !== undefined ? _data.ghsav : 0;
 
 				$('#ghsav').html(_data.ghsav !== undefined ? Math.round(_data.ghsav) + 'GHs' : '0GHs');
-				$('#mac').html(_data.network.ma !== undefined ? _data.network.mac : '--');
-				$('#ip4').html(_data.network.ip !== undefined ? _data.network.ip4 : '--');
-				$('#ip6').html(_data.network.ip !== undefined ? _data.network.ip6 : '--');
+				$('#mac').html(_data.network.mac !== undefined ? _data.network.mac : '--');
+				$('#ip4').html(_data.network.ip4 !== undefined ? _data.network.ip4 : '--');
+				$('#ip6').html(_data.network.ip6 !== undefined ? _data.network.ip6 : '--');
 				$('#ghsmm').html(_data.ghsmm !== undefined ? Math.round(_data.ghsmm) + 'GHs' : '0GHs');
 
 				if (_data.pool[0]) {
