@@ -5,227 +5,194 @@
 		.panel-body{padding:0px;}
 	</style>
 	<script>
-	    var _fan = 0;
-	    var _temp = 0;
-	    var _i = 50 ;
-	    var _ghsav = 0;
-	    var series = 0;
-	    var series1 = 0;
+var _fan = 0;
+var _temp = 0;
+var _i = 50 ;
+var _ghsav = 0;
+var series = 0;
+var series1 = 0;
 
-	    function secondsToHms(d) {
-		d = Number(d);
-		var h = Math.floor(d / 3600);
-		var m = Math.floor(d % 3600 / 60);
-		var s = Math.floor(d % 3600 % 60);
-		return ((h > 0 ? h + "h " : "") + ((m > 0 || h > 0) ? m + "m " : "") + s + "s");
-	    }
+function secondsToHms(d) {
+	d = Number(d);
+	var h = Math.floor(d / 3600);
+	var m = Math.floor(d % 3600 / 60);
+	var s = Math.floor(d % 3600 % 60);
+	return ((h > 0 ? h + "h " : "") + ((m > 0 || h > 0) ? m + "m " : "") + s + "s");
+}
 
-	    function getstatus() {
-		/**
-		* Get Status
-		* @author Wanggh
-		*/
-		$.ajax({
-		    url:'<%=luci.dispatcher.build_url("avalon", "api", "getstatus")%>',
-		    type:'post',
-		    dataType: 'json',
-		    success:function(_data){
+function getstatus() {
+	/**
+	 * Get Status
+	 * @author Wanggh
+	 */
+	$.ajax({
+		url:'<%=luci.dispatcher.build_url("avalon", "api", "getstatus")%>',
+		type:'post',
+		dataType: 'json',
+		success: function(_data) {
 			if (_data) {
-			    _fan = _data.fan !== undefined ? 100 * Math.floor(_data.fan/100) : 0;
-			    _temp = _data.temp !== undefined ? _data.temp : 0;
-			    _ghsav = _data.ghsav !== undefined ? _data.ghsav : 0;
+				_fan = _data.fan !== undefined ? 100 * Math.floor(_data.fan/100) : 0;
+				_temp = _data.temp !== undefined ? _data.temp : 0;
+				_ghsav = _data.ghsav !== undefined ? _data.ghsav : 0;
 
-			    $('#ghsav').html(_data.ghsav !== undefined ? Math.round(_data.ghsav) + 'GHs' : '0GHs');
-			    $('#mac').html(_data.network.ma !== undefined ? _data.network.mac : '--');
-			    $('#ip4').html(_data.network.ip !== undefined ? _data.network.ip4 : '--');
-			    $('#ip6').html(_data.network.ip !== undefined ? _data.network.ip6 : '--');
-			    $('#ghsmm').html(_data.ghsmm !== undefined ? Math.round(_data.ghsmm) + 'GHs' : '0GHs');
+				$('#ghsav').html(_data.ghsav !== undefined ? Math.round(_data.ghsav) + 'GHs' : '0GHs');
+				$('#mac').html(_data.network.ma !== undefined ? _data.network.mac : '--');
+				$('#ip4').html(_data.network.ip !== undefined ? _data.network.ip4 : '--');
+				$('#ip6').html(_data.network.ip !== undefined ? _data.network.ip6 : '--');
+				$('#ghsmm').html(_data.ghsmm !== undefined ? Math.round(_data.ghsmm) + 'GHs' : '0GHs');
 
-			    if (_data.pool[0]) {
-				$('#pool').html(_data.pool[0].url !== undefined ? _data.pool[0].url : 'no-pool');
-				$('#worker').html(_data.pool[0].user !== undefined ? _data.pool[0].user : '--');
-				$('#accept').html(_data.pool[0].accept !== undefined ? _data.pool[0].accept : 'no-accept');
-			    }
-			    $("#modularcnt").html(_data.modularcnt !== undefined ? _data.modularcnt : 0);
-			    $("#voltage").html(_data.voltage !== undefined ? _data.voltage.toFixed(1) + 'V' : '--');
-			    $("#temp").html(_data.temp !== undefined ? _data.temp + '&deg;C' : '--');
-			    $("#fan").html(_data.fan !== undefined ? 100 * Math.floor(_data.fan/100) + 'RPM' : '--');
-			    $("#openwrtver").html(_data.openwrtver !== undefined ? _data.openwrtver : '--');
-			    $("#time").html(_data.systime !== undefined ? _data.systime : '--');
-			    $("#elapsed").html(_data.elapsed !== undefined ? secondsToHms(_data.elapsed) : '--');
+				if (_data.pool[0]) {
+					$('#pool').html(_data.pool[0].url !== undefined ? _data.pool[0].url : 'no-pool');
+					$('#worker').html(_data.pool[0].user !== undefined ? _data.pool[0].user : '--');
+					$('#accept').html(_data.pool[0].accept !== undefined ? _data.pool[0].accept : 'no-accept');
+				}
+				$("#modularcnt").html(_data.modularcnt !== undefined ? _data.modularcnt : 0);
+				$("#voltage").html(_data.voltage !== undefined ? _data.voltage.toFixed(1) + 'V' : '--');
+				$("#temp").html(_data.temp !== undefined ? _data.temp + '&deg;C' : '--');
+				$("#fan").html(_data.fan !== undefined ? 100 * Math.floor(_data.fan/100) + 'RPM' : '--');
+				$("#openwrtver").html(_data.openwrtver !== undefined ? _data.openwrtver : '--');
+				$("#time").html(_data.systime !== undefined ? _data.systime : '--');
+				$("#elapsed").html(_data.elapsed !== undefined ? secondsToHms(_data.elapsed) : '--');
 
 			}
-		    },
-		});
+		},
+	});
 
-		var x = (new Date()).getTime(),
-		y = _fan;
-		y1 = _ghsav;
-		series.addPoint([x, y], true, true);
-		series1.addPoint([x, y1], true, true);
-	    }
+	var x = (new Date()).getTime(),
+	y = _fan;
+	y1 = _ghsav;
+	series.addPoint([x, y], true, true);
+	series1.addPoint([x, y1], true, true);
+}
 
-	    $(function () {
-		var _intvalTime = 5000;
+$(function () {
+	var _intvalTime = 5000;
 
-		$(document).ready(function() {
-		    Highcharts.setOptions({
-			global: {
-			    useUTC: false
-			}
-		    });
+	Highcharts.setOptions({
+		global: {
+			useUTC: false
+		}
+	});
 
-		    var chart;
-		    chart = new Highcharts.Chart({
-			chart: {
-			    renderTo: 'container-speed-fan',
-			    type: 'spline',
-			    animation: Highcharts.svg,
-			    events: {
+	var chart;
+	chart = new Highcharts.Chart({
+		chart: {
+			renderTo: 'container-speed-fan',
+			type: 'spline',
+			animation: Highcharts.svg,
+			events: {
 				load: function() {
 
-				    // set up the updating of the chart each second
-				    series = this.series[0];
-				    series1 = this.series[1];
+					// set up the updating of the chart each second
+					series = this.series[0];
+					series1 = this.series[1];
 
-				    getstatus();
-				    setInterval(function() {
 					getstatus();
-				    }, _intvalTime);
+					setInterval(function() {
+						getstatus();
+					}, _intvalTime);
 				}
-			    }
+			}
+		},
+		title: {text: 'Active Charts'},
+		subtitle: {text: 'Update every 5 seconds'},
+		xAxis: {
+			type: 'datetime',
+			tickPixelInterval: 150
+		},
+		credits: {enabled: false},
+		yAxis: [{
+			labels: {
+				formatter: function() {
+					return this.value +'GHs';
+				},
+				style: {color: '#90ec7d'}
 			},
 			title: {
-			    text: 'Active Charts'
-			},
-			subtitle: {
-			    text: 'Update every 5 seconds'
-			},
-			xAxis: {
-			    type: 'datetime',
-			    tickPixelInterval: 150
-			},
-
-			credits:{
-			    enabled: false
-			},
-			yAxis: [{
-			    labels: {
-				formatter: function() {
-				    return this.value +'GHs';
-				},
-				style: {
-				    color: '#90ec7d'
-				}
-			    },
-			    title: {
 				text: 'GHS av',
-				style: {
-				    color: '#90ec7d'
-				}
-			    },
-			    opposite: true ,
+				style: {color: '#90ec7d'}
 			},
-			{
-			    labels: {
+			opposite: true,
+		}, {
+			labels: {
 				formatter: function() {
-				    return this.value +'RPM';
+					return this.value +'RPM';
 				},
-				style: {
-				    color: '#7cb5ec'
-				}
-			    },
-			    title: {
-				text: 'Fan',
-				style: {
-				    color: '#7cb5ec'
-				}
-			    },
+				style: {color: '#7cb5ec'}
 			},
-			],
+			title: {
+				text: 'Fan',
+				style: {color: '#7cb5ec'}
+			},
+		}],
 
-			tooltip: {
-			    shared: true,
-			    formatter : function(){
+		tooltip: {
+			shared: true,
+			formatter : function() {
 				var s = '';
-				$.each(this.points,function(){
-				    switch(this.series.name){
+				$.each(this.points, function() {
+					switch(this.series.name) {
 					case 'Fan':
-					s +=this.series.name + ':' + this.y + 'RPM';
-					break;
+						s +=this.series.name + ':' + this.y + 'RPM';
+						break;
 					case 'GHS av':
-					s +=this.series.name + ':' + this.y + 'GHs';
+						s +=this.series.name + ':' + this.y + 'GHs';
 					default :
-					break;
-				    }
-				    s +='<br>';
+						break;
+					}
+					s +='<br>';
 				})
 				return s;
-			    }
-
-			},
-			legend: {
-			    layout: 'vertical',
-			    align: 'left',
-			    x: 120,
-			    verticalAlign: 'top',
-			    floating: true,
-			    backgroundColor: '#2f2f31'
-			},
-			exporting: {
-			    enabled: false
-			},
-			series: [{
-			    yAxis:1,
-			    color: '#7cb5ec',
-			    name: 'Fan',
-			    data: (function() { // generate an array of random data
+			}
+		},
+		legend: {
+			layout: 'vertical',
+			align: 'left',
+			x: 120,
+			verticalAlign: 'top',
+			floating: true,
+			backgroundColor: '#2f2f31'
+		},
+		exporting: {enabled: false},
+		series: [{
+			yAxis:1,
+			color: '#7cb5ec',
+			name: 'Fan',
+			data: (function() { // generate an array of random data
 				var data = [],
 				time = (new Date()).getTime(),
 				i;
 				for (i = -_i; i <= 0; i++) {
-				    data.push({
+					data.push({
 					x: time + i * 1000,
 					y: null
-				    });
+					});
 				}
 				return data;
-			    })(),
-			    tooltip: {
-				valueSuffix: ' RPM'
-			    },
-			    marker: {
-				enabled: false
-			    },
-			    dashStyle: 'shortdot',
-			},
-			{
-			    color: '#90ec7d',
-			    name: 'GHS av',
-			    data: (function() { // generate an array of random data
+			})(),
+			tooltip: {valueSuffix: ' RPM'},
+			marker: {enabled: false},
+			dashStyle: 'shortdot',
+		}, {
+			color: '#90ec7d',
+			name: 'GHS av',
+			data: (function() { // generate an array of random data
 				var data = [],
 				time = (new Date()).getTime(),
 				i;
 				for (i = -_i; i <= 0; i++) {
-				    data.push({
-					x: time + i * 1000,
-					y: null
-				    });
+					data.push({
+						x: time + i * 1000,
+						y: null
+					});
 				}
 				return data;
-			    })() ,
-			    tooltip: {
-				valueSuffix: 'GHs'
-			    },
-			    marker: {
-				enabled: false
-			    },
-			}]
-		    });
-
-		});
-
-	    });
+			})() ,
+			tooltip: {valueSuffix: 'GHs'},
+			marker: {enabled: false},
+		}]
+	});
+});
 	</script>
 		<h2><a id="content" name="content">Dashboard</a></h2>
 		<div id="page-inner">
