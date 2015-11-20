@@ -31,36 +31,36 @@
 		    dataType: 'json',
 		    success:function(_data){
 			if (_data) {
-			    _fan = _data.fan ? 100 * Math.floor(_data.fan/100) : '0';
-			    _temp = _data.temp ? _data.temp : '0';
-			    _ghsav = _data.ghsav ? _data.ghsav : '0';
+			    _fan = _data.fan !== undefined ? 100 * Math.floor(_data.fan/100) : 0;
+			    _temp = _data.temp !== undefined ? _data.temp : 0;
+			    _ghsav = _data.ghsav !== undefined ? _data.ghsav : 0;
 
-			    $('#ghsav').html(_data.ghsav ? Math.round(_data.ghsav) + 'GHs' : '0GHs');
-			    $('#mac').html(_data.network.mac ? _data.network.mac : '--');
-			    $('#ip4').html(_data.network.ip4 ? _data.network.ip4 : '--');
-			    $('#ip6').html(_data.network.ip6 ? _data.network.ip6 : '--');
-			    $('#ghsmm').html(_data.ghsmm ? Math.round(_data.ghsmm) + 'GHs' : '0GHs');
+			    $('#ghsav').html(_data.ghsav !== undefined ? Math.round(_data.ghsav) + 'GHs' : '0GHs');
+			    $('#mac').html(_data.network.ma !== undefined ? _data.network.mac : '--');
+			    $('#ip4').html(_data.network.ip !== undefined ? _data.network.ip4 : '--');
+			    $('#ip6').html(_data.network.ip !== undefined ? _data.network.ip6 : '--');
+			    $('#ghsmm').html(_data.ghsmm !== undefined ? Math.round(_data.ghsmm) + 'GHs' : '0GHs');
 
 			    if (_data.pool[0]) {
-				$('#pool').html(_data.pool[0].url ? _data.pool[0].url : 'no-pool');
-				$('#worker').html(_data.pool[0].user ? _data.pool[0].user : '--');
-				$('#accept').html(_data.pool[0].accept ? _data.pool[0].accept : 'no-accept');
+				$('#pool').html(_data.pool[0].url !== undefined ? _data.pool[0].url : 'no-pool');
+				$('#worker').html(_data.pool[0].user !== undefined ? _data.pool[0].user : '--');
+				$('#accept').html(_data.pool[0].accept !== undefined ? _data.pool[0].accept : 'no-accept');
 			    }
-			    $("#modularcnt").html(_data.modularcnt ? _data.modularcnt : '0');
-			    $("#voltage").html(_data.voltage ? _data.voltage.toFixed(1) + 'V' : '0');
-			    $("#temp").html(_data.temp ? _data.temp + '&deg;C' : '0');
-			    $("#fan").html(_data.fan ? 100 * Math.floor(_data.fan/100) + 'RPM' : '0');
-			    $("#openwrtver").html(_data.openwrtver ? _data.openwrtver : '--');
-			    $("#time").html(_data.systime ? _data.systime : '--');
-			    $("#elapsed").html(_data.elapsed ? secondsToHms(_data.elapsed) : '--');
+			    $("#modularcnt").html(_data.modularcnt !== undefined ? _data.modularcnt : 0);
+			    $("#voltage").html(_data.voltage !== undefined ? _data.voltage.toFixed(1) + 'V' : '--');
+			    $("#temp").html(_data.temp !== undefined ? _data.temp + '&deg;C' : '--');
+			    $("#fan").html(_data.fan !== undefined ? 100 * Math.floor(_data.fan/100) + 'RPM' : '--');
+			    $("#openwrtver").html(_data.openwrtver !== undefined ? _data.openwrtver : '--');
+			    $("#time").html(_data.systime !== undefined ? _data.systime : '--');
+			    $("#elapsed").html(_data.elapsed !== undefined ? secondsToHms(_data.elapsed) : '--');
 
 			}
 		    },
 		});
 
 		var x = (new Date()).getTime(),
-		y = parseInt(_fan);
-		y1 = parseInt(_ghsav);
+		y = _fan;
+		y1 = _ghsav;
 		series.addPoint([x, y], true, true);
 		series1.addPoint([x, y1], true, true);
 	    }
