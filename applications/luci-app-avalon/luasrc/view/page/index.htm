@@ -48,7 +48,7 @@
 			    }
 			    $("#modularcnt").html(_data.modularcnt ? _data.modularcnt : '0');
 			    $("#voltage").html(_data.voltage ? _data.voltage.toFixed(1) + 'V' : '0');
-			    $("#temp").html(_data.temp ? _data.temp + '℃' : '0');
+			    $("#temp").html(_data.temp ? _data.temp + '&deg;C' : '0');
 			    $("#fan").html(_data.fan ? 100 * Math.floor(_data.fan/100) + 'RPM' : '0');
 			    $("#openwrtver").html(_data.openwrtver ? _data.openwrtver : '--');
 			    $("#time").html(_data.systime ? _data.systime : '--');
